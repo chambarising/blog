@@ -1,0 +1,32 @@
+<!-- 主体区域 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Blog - Content Manager</title>
+    <link rel="stylesheet" href="/admin/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/css/base.css">
+    
+    <!-- 预留css样式坑 -->
+    {{block 'link'}}{{/block}}
+
+</head>
+
+<body>
+
+    <!-- 预留内容坑 -->
+    {{block 'main'}}{{/block}}
+
+    <!-- 预留css样式坑 -->
+    {{block 'style'}}{{/block}}
+
+    <script src="/admin/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- 预留js代码坑 -->
+    {{block 'script'}}{{/block}}
+
+</body>
+
+</html>

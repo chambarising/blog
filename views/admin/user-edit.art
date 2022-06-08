@@ -1,0 +1,66 @@
+<!-- 继承主体框架模板 -->
+{{extend './common/layout.art'}}
+
+<!-- 填给主体部分挖的坑 -->
+{{block 'main'}}
+    <!-- 头部 -->
+    {{include './common/header.art'}}
+    <!-- /头部 -->
+
+    <!-- 主体内容 -->
+    <div class="content">
+
+        <!-- 侧边栏 -->
+    {{include './common/aside.art'}}
+        <!-- 侧边栏 -->
+
+        <div class="main">
+            <!-- 分类标题 -->
+            <div class="title">
+                <h4 style="display:{{btn== '修改'?'block':'none'}}">修改id为：{{@ user && user._id}}</h4>
+                <p class="tips">{{msg}}</p>
+            </div>
+            <!-- /分类标题 -->
+            <!-- 通过表单控件的value值来显示要修改的用户的原信息 -->
+            <form class="form-container" id="form" action={{link}} method="post">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <!-- 运用&&（并且）运算符，判断当user存在时才赋值给value -->
+                    <input type="text" class="form-control" placeholder="请输入用户名" name="username" value="{{user && user.username}}">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" class="form-control" placeholder="请输入邮箱地址" name="emil" value="{{user && user.emil}}">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" placeholder="请输入密码" name="passwords">
+                </div>
+                <div class="form-group">
+                    <label>角色</label>
+                    <select class="form-control" name="role">
+                    <!-- 通过selected属性来控制下拉框的选中状态 -->
+                        <option value = "普通用户" {{user && user.role == '普通用户'?'selected':''}} style="display:{{user && userInfo.role == '总管' ? (user && user._id == userInfo.id ? 'none':'inline-block'):(user && user._id == userInfo.id ? 'none':'inline-block')}}">普通用户</option>
+                        <option value = "超级管理员" {{user && user.role == '超级管理员'?'selected':''}} style="display:{{user ? (userInfo.role == '总管' ? (user._id == userInfo.id ? 'none':'inline-block'):(user._id == userInfo.id ? 'inline-block':'none')):(userInfo.role == '总管' ? 'inline-block':'none')}}">超级管理员</option>
+                        <option value = "总管" {{user && user.role == '总管'?'selected':''}} style="display:{{userInfo.role == '总管' ? 'inline-block':'none'}}">总管</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="state">
+                        <option value = "true" {{user && user.state == true?'selected':''}}>启用</option>
+                        <option value = "false" {{user && user.state == false?'selected':''}} style="display:{{user && userInfo.role == '总管' ? (user && user._id == userInfo.id ? 'none':'inline-block'):(user && user._id == userInfo.id ? 'none':'inline-block')}}">禁用</option>
+                    </select>
+                </div>
+                <div class="buttons">
+                    <input type="submit" class="btn btn-primary" value="{{btn}}">
+                </div>
+            </form>
+        </div>
+        
+    </div>
+    <!-- /主体内容 -->
+    
+{{/block}}
+
+

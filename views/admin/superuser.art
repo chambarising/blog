@@ -1,0 +1,114 @@
+<!-- 继承主体框架模板 -->
+{{extend './common/layout.art'}}
+
+<!-- 填给主体部分挖的坑 -->
+{{block 'main'}}
+
+<!-- 使用子模版抽离头部区域 -->
+<!-- 引用头部子模版 -->
+    {{include './common/header.art'}}
+
+    <!-- 主体内容 -->
+    <div class="content">
+
+    <!-- 引用侧边栏字模板 -->
+	{{include './common/aside.art'}}
+
+        <div class="main">
+        	<!-- 分类标题 -->
+            <div class="title">
+                <h4>用户---{{userInfo.username}}</h4>
+                <span>找到{{count}}个用户</span>
+                <a href="/admin/user-edit" class="btn btn-primary new">新增用户</a>
+            </div>
+            <!-- /分类标题 -->
+            <!-- 内容列表 -->
+            <table class="table table-striped table-bordered table-hover custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>角色</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{each Users}}
+                    <tr>
+                    <!-- @表示原文输出，id如不原文输出会带有引号 -->
+                        <td>{{@$value._id}}</td>
+                        <td>{{$value.username}}</td>
+                        <td>{{$value.role == '普通用户' ? ($value.emil) : ($value._id == userInfo.id ? ($value.emil):'****************') }}</td>
+                        <td>{{$value.role}}</td>
+                        <td>{{$value.state == true ? '启用':'禁用'}}</td>
+                        <td>
+                            <a href="/admin/user-edit?id={{@$value._id}}" class="glyphicon glyphicon-edit" style="display:{{$value.role == '普通用户' ? 'inline':($value._id == userInfo.id ? 'inline':'none')}}"></a>
+                            <i class="glyphicon glyphicon-remove delete" data-toggle="modal" data-target=".confirm-modal" style="display:{{$value.role == '普通用户'?'inline':'none'}}" data-id="{{@$value._id}}"></i>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <!-- /内容列表 -->
+            <!-- 分页 -->
+            <ul class="pagination">
+            <!-- <%= %>表示输出的意思 -->
+                <li style="display:<%= page==1?'none':'inline'%>">
+                    <a href="/admin/superuser?page= <%=page-1 %> ">
+			        <span>&laquo;</span>
+			      </a>
+                </li>
+                <!-- 由于total为数字型，不能使用each循环，所以这里使用原始语法 -->
+                <% for (var i=1; i<=total; i++){ %>
+                <li><a href="/admin/superuser?page=<%=i %>">{{i}}</a></li>
+                <% } %>
+                <li style="display:<%= page==total?'none':'inline'%>">
+                <!-- 因为减号存在隐式转换功能而加号不存在，所以要先减0再加1 --> 
+                    <a href="/admin/superuser?page=<%=page-0+1 %>">
+			        <span>&raquo;</span>
+			      </a>
+                </li>
+            </ul>
+            <!-- /分页 -->
+        </div>
+
+    </div>
+    <!-- /主体内容 -->
+    
+    <!-- 删除确认弹出框 -->
+    <div class="modal fade confirm-modal">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" action="/admin/delete" method="get">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">请确认</h4>
+                </div>
+                <div class="modal-body">
+                    <p>您确定要删除这个用户吗?</p>
+                    <!-- 创建隐藏域用于接收要删除的用户的id -->
+                    <input type="hidden" name="id" id="deleteUserId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /删除确认弹出框 -->
+    
+{{/block}}
+{{block 'script'}}
+<script>
+$('.delete').on('click',function(){
+  //获取用户id,使用attr方法
+  var id = $(this).attr('data-id')
+  //将获取到的id添加到隐藏域中
+  $('#deleteUserId').val(id)
+})
+</script>
+{{/block}}
+
+
